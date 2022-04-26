@@ -1,0 +1,74 @@
+body {
+    background-color: #3b4252;
+    box-sizing: border-box;
+    min-width: 600px;
+    min-height: 600px;
+}
+
+h1 {
+    text-align: center;
+    font-family: "Fira Code Light";
+    color: #d8dee9;
+}
+
+table {
+    margin: auto;
+    background-color: #3b4252;
+}
+
+td {
+
+    text-align: center;
+}
+
+.cell {
+    /*height: 2rem;*/
+    /*width: 2rem;*/
+    height: 4rem;
+    width: 4rem;
+    margin: auto;
+    cursor: crosshair;
+    border-radius: 5px;
+    background-color: #434c5e;
+}
+
+.cell:hover {
+    background-color: #4c566a;
+    transition: 0.2s;
+}
+
+.ship {
+    /*height: 2rem;*/
+    /*width: 2rem;*/
+    height: 4rem;
+    width: 4rem;
+    margin: auto;
+    cursor: crosshair;
+    border-radius: 5px;
+    background-color: #2e3440;
+}
+
+.ship:hover {
+    background-color: #333A47;
+    transition: 0.2s;
+}
+
+.damaged_ship {
+    background-color: #2e3440;
+    transition: 0.2s;
+    background-color: #bf616a;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.shot_cell {
+    background-color: #434c5e;
+    transition: 0.2s;
+    background-color: #d8dee9;
+    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+}
