@@ -1,5 +1,9 @@
-let height;
-let width;
+let shootShipColor =  '#bf616a'
+let shootWaterColor = '#81a1c1'
+let borderColor = '#2e3440'
+
+let height = 10
+let width = 10
 let id = 1
 let hitShip = new Audio('assets/audio/reverb-fart-meme-earrape.mp3')
 let hitWater = new Audio('assets/audio/fart-with-extra-reverb.mp3')
@@ -11,34 +15,22 @@ playBG()
 init()
 
 async function getBoardSize() {
-    const requestURL = 'http://localhost:8080/api/v1/board'
-    const request = new Request(requestURL)
-
-    const response = await fetch(request)
-    const boardDimensions = await response.json()
-    height = boardDimensions["height"]
-    width = boardDimensions["width"]
 }
 
 function init() {
     getBoardSize().then(r => {
         let body = document.getElementsByTagName("body")[0]
-        let table = document.createElement("table")
-        let tableBody = document.createElement("tbody")
-        for (let j = 0; j < width; j++) {
-            let row = document.createElement("tr")
-            for (let i = 0; i < height; i++) {
-                let cell = document.createElement("td")
-                cell.classList.add('cell')
-                cell.setAttribute("id", id.toString())
-                id++
-                cell.setAttribute("onclick", "shoot(this)")
-                row.append(cell)
-            }
-            tableBody.appendChild(row);
+        let container = document.createElement("div")
+        container.classList.add('container')
+        for (let i = 0; i < width * height; i++) {
+            let cell = document.createElement("div")
+            cell.classList.add('cell')
+            cell.setAttribute('id', id.toString())
+            cell.setAttribute('onclick', 'shoot(this)')
+            id++
+            container.appendChild(cell)
         }
-        table.appendChild(tableBody)
-        body.appendChild(table)
+        body.appendChild(container)
         createShips().then(r => {
         })
     })
@@ -49,17 +41,9 @@ async function playBG() {
 }
 
 async function createShips() {
-    const requestURL = 'http://localhost:8080/api/v1/fleet'
-    const request = new Request(requestURL)
-
-    const response = await fetch(request)
-    const shipsPosition = await response.json()
-    shipsPosition["ships"].forEach(e => {
-        e["mastsIDs"].forEach(m => {
-            document.getElementById(m.toString()).classList.remove("cell")
-            document.getElementById(m.toString()).classList.add("ship")
-        })
-    });
+    document.getElementById("1").classList.add("ship")
+    document.getElementById("13").classList.add("ship")
+    document.getElementById("14").classList.add("ship")
 }
 
 const delay = millis => new Promise((resolve, reject) => {
@@ -77,12 +61,12 @@ async function shoot(x) {
 
     switch (response) {
         case 'HITWATER':
-            await damagingCell(x, 'shot_cell')
+            await shootCell(x, shootWaterColor)
             hitWater.load()
             hitWater.play()
             break;
         case 'HITSHIP':
-            await damagingCell(x, 'damaged_ship')
+            await shootCell(x, shootShipColor)
             hitShip.load()
             hitShip.play()
             break;
@@ -92,7 +76,7 @@ async function shoot(x) {
             window.alert("Illegal move")
             break;
         case 'FLEETSUNK':
-            damagingCell(x, 'damaged_ship')
+            shootCell(x, shootShipColor)
             hitShip.load()
             hitShip.play()
             await delay(200)
@@ -104,8 +88,9 @@ async function shoot(x) {
     }
 }
 
-function damagingCell(x, className) {
-    document.getElementById(x.id).classList.remove(x.className);
-    document.getElementById(x.id).classList.add(className);
+function shootCell(x, color) {
     document.getElementById(x.id).removeAttribute("onclick")
+    document.getElementById(x.id).style.backgroundColor = color
+    document.getElementById(x.id).style.borderColor = borderColor
+    document.getElementById(x.id).style.cursor = 'default'
 }
