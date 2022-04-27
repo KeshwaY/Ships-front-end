@@ -6,38 +6,6 @@
     --nord3: #4c566a;
 }
 
-.fadeout {
-    animation-name: fadeout-animation;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-}
-
-.fadein {
-    animation-name: fadein-animation;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes fadein-animation {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeout-animation {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
 body {
     transition: 0.8s;
     background-color: var(--nord0);
@@ -98,4 +66,36 @@ body {
 
 .ship:hover {
     background-color: var(--nord1);
+}
+
+.fadeout {
+    animation-name: fadeout-animation;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+.fadein {
+    animation-name: fadein-animation;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein-animation {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout-animation {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }

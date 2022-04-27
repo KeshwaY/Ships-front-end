@@ -5,7 +5,7 @@ let shootShipColor = '#bf616a'
 let shootWaterColor = '#81a1c1'
 let borderColor = '#2e3440'
 
-// BOARDS OPACITY [FOR NOW HARDCODED]
+// BOARDS PROPERTIES [FOR NOW HARDCODED]
 let enemyAnimation = 'fadeout'
 let playerAnimation = 'fadein'
 let enemyLeft = '30vw'
@@ -25,15 +25,18 @@ button.innerText = 'Swap'
 button.setAttribute('onclick', 'swapBoards()')
 body.appendChild(button)
 
-// TODO: REFACTOR
 function swapBoards() {
     document.getElementById('enemy').style.left = playerLeft
     document.getElementById('player').style.left = enemyLeft
 
     let temp1 = playerLeft
-    playerLeft= enemyLeft
+    playerLeft = enemyLeft
     enemyLeft = temp1
 
+    boardAnimation()
+}
+
+function boardAnimation() {
     document.getElementById('player').classList.add(playerAnimation)
     document.getElementById('player').classList.remove(enemyAnimation)
     document.getElementById('enemy').classList.add(enemyAnimation)
@@ -44,28 +47,7 @@ function swapBoards() {
     enemyAnimation = temp
 }
 
-function setLightMode() {
-    body.style.backgroundColor = '#e5e9f0'
-    document.getElementById('player').style.backgroundColor = '#d8dee9'
-    document.getElementById('player').style.borderColor = '#d8dee9'
-    for (let i = 0; i < document.getElementsByClassName('cell').length; i++) {
-        document.getElementsByClassName('cell')[i].style.backgroundColor = '#eceff4'
-    }
-    for (let i = 0; i < document.getElementsByClassName('ship').length; i++) {
-        document.getElementsByClassName('ship')[i].style.backgroundColor = '#2e3440'
-        document.getElementsByClassName('ship')[i].style.borderColor = '#e5e9f0'
-
-    }
-
-}
-
-/*Will be implemented after backend supports it*/
-// async function getBoardSize() {
-// }
-
-
 function init(type) {
-    // getBoardSize().then(r => {
     let container = document.createElement("div")
     container.classList.add('container')
     container.classList.add(type)
@@ -85,7 +67,6 @@ function init(type) {
     body.appendChild(container)
     createShips(type).then(r => {
     })
-    // })
 }
 
 async function createShips(type) {
@@ -102,42 +83,7 @@ const delay = millis => new Promise((resolve, reject) => {
 
 async function shoot(x) {
     await shootCell(x, shootWaterColor)
-
     swapBoards()
-
-    const requestURL = 'http://localhost:8080/api/v1/shot?id=' + x.id
-    const request = new Request(requestURL)
-    const response = await fetch(request, {
-        method: "POST"
-    }).then(res => res.json())
-
-    switch (response) {
-        case 'HITWATER':
-            await shootCell(x, shootWaterColor)
-            hitWater.load()
-            hitWater.play()
-            break;
-        case 'HITSHIP':
-            await shootCell(x, shootShipColor)
-            hitShip.load()
-            hitShip.play()
-            break;
-        case 'ILLEGAL':
-            invalid.load()
-            invalid.play()
-            window.alert("Illegal move")
-            break;
-        case 'FLEETSUNK':
-            shootCell(x, shootShipColor)
-            hitShip.load()
-            hitShip.play()
-            await delay(200)
-            if (window.confirm("game over! restart?")) {
-                window.location.reload()
-                break
-            }
-            window.location.replace("gameover.html")
-    }
 }
 
 async function shootCell(x, color) {
