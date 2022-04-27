@@ -7,10 +7,33 @@
 }
 
 body {
+    transition: 0.8s;
     background-color: var(--nord0);
 }
 
+.player {
+    left: -50vw;
+    opacity: 0;
+}
+
+.enemy {
+    left: 30vw;
+    opacity: 1;
+}
+
+.boardContainer {
+    position: absolute;
+    left: 30vw;
+    margin: 4.2vw auto;
+    background-color: var(--nord1);
+    height: 40vw;
+    width: 40vw;
+    border: solid var(--nord1);
+    border-radius: 10px;
+}
+
 .container {
+    position: absolute;
     margin: 4.2vw auto;
     background-color: var(--nord1);
     display: flex;
@@ -29,7 +52,6 @@ body {
     border: solid 0.2vw var(--nord0);
     border-radius: 0.5vw;
     margin: auto;
-    cursor: crosshair;
     background-color: var(--nord2);
 }
 
@@ -44,4 +66,36 @@ body {
 
 .ship:hover {
     background-color: var(--nord1);
+}
+
+.fadeout {
+    animation-name: fadeout-animation;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+.fadein {
+    animation-name: fadein-animation;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein-animation {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout-animation {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
