@@ -5,9 +5,11 @@ let shootShipColor = '#bf616a'
 let shootWaterColor = '#81a1c1'
 let borderColor = '#2e3440'
 
-// BOARDS POSITION [FOR NOW HARDCODED]
-let enemyLeft = '-50vw'
-let playerLeft = '30vw'
+// BOARDS OPACITY [FOR NOW HARDCODED]
+let enemyAnimation = 'fadeout'
+let playerAnimation = 'fadein'
+let enemyLeft = '30vw'
+let playerLeft = '-50vw'
 
 // VARIABLES [FOR NOW HARDCODED]
 let height = 10
@@ -19,16 +21,42 @@ init('player')
 init('enemy')
 
 let button = document.createElement('button')
-button.innerText = 'Swap Boards'
+button.innerText = 'Swap'
 button.setAttribute('onclick', 'swapBoards()')
 body.appendChild(button)
 
+// TODO: REFACTOR
 function swapBoards() {
     document.getElementById('enemy').style.left = playerLeft
     document.getElementById('player').style.left = enemyLeft
-    let temp = playerLeft
-    playerLeft = enemyLeft
-    enemyLeft = temp
+
+    let temp1 = playerLeft
+    playerLeft= enemyLeft
+    enemyLeft = temp1
+
+    document.getElementById('player').classList.add(playerAnimation)
+    document.getElementById('player').classList.remove(enemyAnimation)
+    document.getElementById('enemy').classList.add(enemyAnimation)
+    document.getElementById('enemy').classList.remove(playerAnimation)
+
+    let temp = playerAnimation
+    playerAnimation = enemyAnimation
+    enemyAnimation = temp
+}
+
+function setLightMode() {
+    body.style.backgroundColor = '#e5e9f0'
+    document.getElementById('player').style.backgroundColor = '#d8dee9'
+    document.getElementById('player').style.borderColor = '#d8dee9'
+    for (let i = 0; i < document.getElementsByClassName('cell').length; i++) {
+        document.getElementsByClassName('cell')[i].style.backgroundColor = '#eceff4'
+    }
+    for (let i = 0; i < document.getElementsByClassName('ship').length; i++) {
+        document.getElementsByClassName('ship')[i].style.backgroundColor = '#2e3440'
+        document.getElementsByClassName('ship')[i].style.borderColor = '#e5e9f0'
+
+    }
+
 }
 
 /*Will be implemented after backend supports it*/
@@ -42,6 +70,7 @@ function init(type) {
     container.classList.add('container')
     container.classList.add(type)
     container.setAttribute('id', type)
+
     for (let i = 0; i < width * height; i++) {
         let cell = document.createElement("div")
         cell.classList.add('cell')
@@ -72,6 +101,10 @@ const delay = millis => new Promise((resolve, reject) => {
 });
 
 async function shoot(x) {
+    await shootCell(x, shootWaterColor)
+
+    swapBoards()
+
     const requestURL = 'http://localhost:8080/api/v1/shot?id=' + x.id
     const request = new Request(requestURL)
     const response = await fetch(request, {
@@ -107,9 +140,10 @@ async function shoot(x) {
     }
 }
 
-function shootCell(x, color) {
+async function shootCell(x, color) {
     document.getElementById(x.id).removeAttribute("onclick")
     document.getElementById(x.id).style.backgroundColor = color
     document.getElementById(x.id).style.borderColor = borderColor
     document.getElementById(x.id).style.cursor = 'default'
+    await delay(100)
 }
